@@ -24,7 +24,7 @@ else
 	# sort the months, then count the number of occurances in each unique month, take out any numbers that are not in range of 1-12 and regex out any non-integers
 	sorted_months=$(echo "$months" | awk '/^[0-9]*$/, $1 >= 1 && $1 < 13 {print $1}' | tail -n+2 | sort -n | uniq -c)
 
-	# take the months with counts, sort for median and MAD calculations
+	# take the months with counts, sort for median and MAD calculations (no order)
 	sorted_counts=$(echo "$sorted_months" | awk '{print $1}' | sort -n)
 	# median calculation
 	median=$(echo "$sorted_counts" | awk '{a[NR]=$1}
