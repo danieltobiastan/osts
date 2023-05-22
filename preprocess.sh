@@ -1,4 +1,5 @@
 #!/bin/bash
+# Done by: Daniel Tan (22684196)
 
 # Take in the input file, check that the file is valid
 #
@@ -19,15 +20,19 @@ then
 
 else
 	file=$1
+	# remove the summary column
+	no_summary=$(awk -F "\t" '{print $1"\t"$2"\t"$3"\t"$4"\t"$5"\t"$6}' $file)
+	# remove line if not equal 6 columns, unclean data
+	clean=$(echo "$no_summary" | awk -F "\t" 'NF == 6')
 
 	# Preprocess the file, with the relevant columns needed
-	# For untouched data to combine later
-	cov_st_ind=$(awk -F "\t" '{print $1"\t"$2"\t"$3"\t"$4}' $file)
+	# For untouched data to combine later ( first 4 columns)
+	cov_st_ind=$(echo "$clean" | awk -F "\t" '{print $1"\t"$2"\t"$3"\t"$4}')
 	cov_st_ind_head=$(echo "$cov_st_ind" | head -n1)
 	cov_st_ind_data=$(echo "$cov_st_ind" | tail -n+2)
 
-	# Take out relevant data
-	date_breach=$(awk -F "\t" '{print $4"\t"$5}' $file)
+	# Take out relevant data to preprocess ( date and breach type)
+	date_breach=$(echo "$clean" | awk -F "\t" '{print $4"\t"$5}')
 	data=$(echo "$date_breach" | tail -n+2)
 
 	# Preprocess to get the month and dates out
